@@ -17,7 +17,7 @@ if (typeof getSiteKey === 'undefined') {
 
 // SENİN FIREBASE AYARLARIN
 var firebaseConfig = {
-    apiKey: "AIzaSyBiEXctGsBTCHpuFtQMTDU-uYsuxvASR8I",
+    apiKey: "BURAYA-API-KEY-YAZ",
     authDomain: "hizlikargo-93a30.firebaseapp.com",
     databaseURL: "https://hizlikargo-93a30-default-rtdb.europe-west1.firebasedatabase.app",
     projectId: "hizlikargo-93a30",
@@ -65,7 +65,7 @@ function initFirebase() {
                 console.log('✅ Storage bağlantısı kuruldu');
             }
             
-            firebaseHazir = true;
+            firebaseHazır = true;
             
             // Bekleyen callback'leri çağır
             console.log('📢 ' + firebaseHazirCallbacks.length + ' callback çağrılıyor...');
@@ -109,3 +109,4 @@ function getWhatsAppNumber() {
 }
 
 console.log('📦 Firebase Config yüklendi - Project:', firebaseConfig.projectId);
+

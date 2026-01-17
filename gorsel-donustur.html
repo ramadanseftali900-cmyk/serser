@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Görsel Dönüştür - WebP Converter</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); 
+            min-height: 100vh; 
+            color: #fff; 
+        }
+        
+        .header { 
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+            position: relative;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+        
+        .header-center {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .header h1 { 
+            background: linear-gradient(135deg, #E040FB 0%, #2196F3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 42px; 
+            margin-bottom: 8px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            gap: 15px; 
+            font-weight: 700;
+        }
+        
+        .header-subtitle {
+            color: #888;
+            font-size: 16px;
+            font-weight: normal;
+        }
+        
+        .back-btn { 
+            background: linear-gradient(135deg, #E040FB 0%, #7C4DFF 100%);
+            color: #fff; 
+            border: none; 
+            padding: 12px 24px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            border-radius: 25px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(224, 64, 251, 0.4);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .section-header {
+            background: #000;
+            padding: 40px;
+            text-align: center;
+            margin: 0 auto 40px;
+            border-radius: 20px;
+            position: relative;
+            border: 2px solid rgba(224, 64, 251, 0.5);
+        }
+        .section-header h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: linear-gradient(135deg, #E040FB 0%, #2196F3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .section-header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .info-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 2px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .info-box-icon {
+            font-size: 24px;
+            color: #ffc107;
+        }
+        
+        .converter-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .converter-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(224, 64, 251, 0.3);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .converter-card:hover {
+            border-color: #E040FB;
+            background: rgba(224, 64, 251, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .converter-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #E040FB;
+        }
+        
+        .converter-card p {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .converter-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #E040FB 0%, #7C4DFF 100%);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .converter-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(224, 64, 251, 0.4);
+        }
+        
+        .step-group {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(224, 64, 251, 0.3);
+            border-radius: 15px;
+            padding: 0;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .step-group-title {
+            background: linear-gradient(135deg, #E040FB 0%, #7C4DFF 100%);
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin: 0;
+            border-bottom: 2px solid rgba(224, 64, 251, 0.3);
+            display: block;
+        }
+        
+        .step-group-content {
+            padding: 20px;
+            display: grid;
+            gap: 15px;
+        }
+        
+        .step-item {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+        
+        .step-item:hover {
+            border-color: rgba(224, 64, 251, 0.5);
+            background: rgba(224, 64, 251, 0.05);
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #E040FB 0%, #7C4DFF 100%);
+            color: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .step-text {
+            flex: 1;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-top: 10px;
+            color: #2ed573;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #E040FB 0%, #7C4DFF 100%);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(224, 64, 251, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .tip-box {
+            background: rgba(46, 213, 115, 0.1);
+            border: 2px solid rgba(46, 213, 115, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-box strong {
+            color: #2ed573;
+        }
+        
+        @media (max-width: 768px) {
+            .converter-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 28px;
+            }
+            .section-header h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <button class="back-btn" onclick="location.href='domain-bagla.html'">← Geri Dön</button>
+        <div class="header-center">
+            <h1>🖼️ Görsel Dönüştür 🖼️</h1>
+            <div class="header-subtitle">Görselleri WebP formatına çevir - Hızlı yükleme</div>
+        </div>
+        <div style="width: 120px;"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="section-header">
+        <h2>🚀 WebP Converter</h2>
+        <p>Görselleri WebP formatına çevirerek sayfa hızını artır</p>
+    </div>
+    
+    <div class="info-box">
+        <div class="info-box-icon">ℹ️</div>
+        <div>
+            <strong>WebP nedir?</strong> Modern görsel formatı. JPG/PNG'den %25-35 daha küçük dosya boyutu, aynı kalite. Tüm modern tarayıcılar destekler.
+        </div>
+    </div>
+    
+    <!-- CONVERTER SEÇENEKLERI -->
+    <div class="converter-grid">
+        <!-- CloudConvert -->
+        <div class="converter-card">
+            <h3>☁️ CloudConvert</h3>
+            <p>Profesyonel, toplu dönüştürme yapabilir, API desteği var. Ücretsiz 25 dönüştürme/gün.</p>
+            <a href="https://cloudconvert.com/jpg-to-webp" target="_blank" class="converter-link">🔗 CloudConvert'e Git</a>
+            <div style="font-size: 12px; color: #888;">Toplu dosya yükleme için ideal</div>
+        </div>
+        
+        <!-- EZGif -->
+        <div class="converter-card">
+            <h3>🎨 EZGif</h3>
+            <p>Basit, hızlı, kurulum gerektirmez. Tek seferde bir görsel dönüştür. Tamamen ücretsiz.</p>
+            <a href="https://ezgif.com/jpg-to-webp" target="_blank" class="converter-link">🔗 EZGif'e Git</a>
+            <div style="font-size: 12px; color: #888;">Hızlı test için ideal</div>
+        </div>
+    </div>
+    
+    <!-- ADIM ADIM TALİMAT -->
+    <div class="step-group">
+        <div class="step-group-title">📋 ADIM ADIM TALİMAT - CloudConvert Kullanımı</div>
+        <div class="step-group-content">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-text">
+                    <strong>CloudConvert'e git</strong><br>
+                    Yukarıdaki "CloudConvert'e Git" butonuna tıkla
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-text">
+                    <strong>Görselleri seç</strong><br>
+                    "Select File" tıkla, dönüştürmek istediğin JPG/PNG görselleri seç (birden fazla seçebilirsin)
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <div class="step-text">
+                    <strong>Format seç</strong><br>
+                    Sağ tarafta "Output format" kısmında "WebP" seç
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-text">
+                    <strong>Dönüştür</strong><br>
+                    "Convert" butonuna tıkla, bekle (birkaç saniye)
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-text">
+                    <strong>İndir</strong><br>
+                    Dönüştürülen WebP dosyalarını indir
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-number">6</div>
+                <div class="step-text">
+                    <strong>Yükle</strong><br>
+                    WebP dosyalarını sunucuna/Firebase'e yükle, HTML'de src'yi güncelle
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- HIZLI TİP -->
+    <div class="tip-box">
+        <strong>💡 Hızlı Tip:</strong> Eğer sadece test etmek istiyorsan, EZGif kullan. Bir görsel seç, dönüştür, indir. 30 saniye içinde biter.
+    </div>
+    
+    <!-- HTML ÖRNEK -->
+    <div class="step-group">
+        <div class="step-group-title">💻 HTML ÖRNEK - WebP Kullanımı</div>
+        <div class="step-group-content">
+            <div class="step-item">
+                <div class="step-text">
+                    <strong>Eski yol (sadece JPG):</strong>
+                    <div class="code-block">&lt;img src="image.jpg" alt=""&gt;</div>
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-text">
+                    <strong>Yeni yol (WebP + Fallback):</strong>
+                    <div class="code-block">&lt;picture&gt;<br>
+  &lt;source srcset="image.webp" type="image/webp"&gt;<br>
+  &lt;img src="image.jpg" alt=""&gt;<br>
+&lt;/picture&gt;</div>
+                    <div style="font-size: 12px; color: #aaa; margin-top: 10px;">Eski tarayıcılar WebP'yi desteklemezse JPG'yi gösterir</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- DOSYA BOYUTU KARŞILAŞTIRMASI -->
+    <div class="step-group">
+        <div class="step-group-title">📊 DOSYA BOYUTU KARŞILAŞTIRMASI</div>
+        <div class="step-group-content">
+            <div class="step-item">
+                <div class="step-text">
+                    <strong>JPG:</strong> 500 KB<br>
+                    <strong>PNG:</strong> 800 KB<br>
+                    <strong>WebP:</strong> 350 KB (30% daha küçük!)
+                </div>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-text">
+                    <strong>15 görsel örneği:</strong><br>
+                    JPG: 7.5 MB → WebP: 5.25 MB<br>
+                    <span style="color: #2ed573;">💚 2.25 MB tasarruf = Daha hızlı yükleme</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- UYARI -->
+    <div class="info-box" style="background: rgba(255, 87, 34, 0.1); border-color: rgba(255, 87, 34, 0.3);">
+        <div class="info-box-icon">⚠️</div>
+        <div>
+            <strong>Önemli:</strong> WebP dosyalarını yükledikten sonra, HTML'de src'yi güncellemeyi unutma. Örn: src="image.webp"
+        </div>
+    </div>
+    
+    <!-- BUTONLAR -->
+    <div class="btn-group">
+        <a href="https://cloudconvert.com/jpg-to-webp" target="_blank" class="btn btn-primary">☁️ CloudConvert'e Git</a>
+        <a href="https://ezgif.com/jpg-to-webp" target="_blank" class="btn btn-primary">🎨 EZGif'e Git</a>
+        <button class="btn btn-secondary" onclick="location.href='domain-bagla.html'">← Geri Dön</button>
+    </div>
+    
+    <!-- GÖRSEL YÖNETİM BÖLÜMÜ -->
+    <div class="step-group" style="margin-top: 50px;">
+        <div class="step-group-title">⚙️ GÖRSEL YÖNETİM - Ürün Görselleri Güncelle</div>
+        <div class="step-group-content" style="padding: 30px;">
+            <div style="background: rgba(46, 213, 115, 0.1); border: 2px solid rgba(46, 213, 115, 0.3); border-radius: 10px; padding: 20px; margin-bottom: 30px;">
+                <strong style="color: #2ed573;">💡 Nasıl Çalışır?</strong><br>
+                <div style="font-size: 14px; margin-top: 10px; line-height: 1.8;">
+                    1️⃣ Aşağıda ürün numarası seç (1-10)<br>
+                    2️⃣ 15 görsel URL'sini gir<br>
+                    3️⃣ "Kaydet" tıkla<br>
+                    4️⃣ O ürünün sayfası otomatik güncellenir
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 25px;">
+                <label style="color: #E040FB; font-weight: bold; font-size: 16px; display: block; margin-bottom: 10px;">📦 Ürün Seç:</label>
+                <select id="urunSecim" style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #E040FB; background: rgba(224, 64, 251, 0.1); color: #fff; font-size: 16px; font-weight: bold;">
+                    <option value="">-- Ürün Seçiniz --</option>
+                    <option value="1">Ürün 1</option>
+                    <option value="2">Ürün 2</option>
+                    <option value="3">Ürün 3</option>
+                    <option value="4">Ürün 4</option>
+                    <option value="5">Ürün 5</option>
+                    <option value="6">Ürün 6</option>
+                    <option value="7">Ürün 7</option>
+                    <option value="8">Ürün 8</option>
+                    <option value="9">Ürün 9</option>
+                    <option value="10">Ürün 10</option>
+                </select>
+            </div>
+            
+            <div id="gorselInputlari" style="display: none;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 1 URL:</label>
+                        <input type="text" id="gorsel1" placeholder="https://example.com/image1.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 2 URL:</label>
+                        <input type="text" id="gorsel2" placeholder="https://example.com/image2.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 3 URL:</label>
+                        <input type="text" id="gorsel3" placeholder="https://example.com/image3.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 4 URL:</label>
+                        <input type="text" id="gorsel4" placeholder="https://example.com/image4.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 5 URL:</label>
+                        <input type="text" id="gorsel5" placeholder="https://example.com/image5.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 6 URL:</label>
+                        <input type="text" id="gorsel6" placeholder="https://example.com/image6.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 7 URL:</label>
+                        <input type="text" id="gorsel7" placeholder="https://example.com/image7.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 8 URL:</label>
+                        <input type="text" id="gorsel8" placeholder="https://example.com/image8.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 9 URL:</label>
+                        <input type="text" id="gorsel9" placeholder="https://example.com/image9.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 10 URL:</label>
+                        <input type="text" id="gorsel10" placeholder="https://example.com/image10.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 11 URL:</label>
+                        <input type="text" id="gorsel11" placeholder="https://example.com/image11.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 12 URL:</label>
+                        <input type="text" id="gorsel12" placeholder="https://example.com/image12.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 13 URL:</label>
+                        <input type="text" id="gorsel13" placeholder="https://example.com/image13.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 14 URL:</label>
+                        <input type="text" id="gorsel14" placeholder="https://example.com/image14.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                    <div>
+                        <label style="color: #E040FB; font-weight: bold; font-size: 12px; display: block; margin-bottom: 5px;">Görsel 15 URL:</label>
+                        <input type="text" id="gorsel15" placeholder="https://example.com/image15.webp" style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid rgba(224, 64, 251, 0.5); background: rgba(0,0,0,0.8); color: #fff; font-size: 12px;">
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <button onclick="gorselKaydet()" style="background: linear-gradient(135deg, #2ed573 0%, #17a2b8 100%); color: #fff; border: none; padding: 15px 50px; border-radius: 30px; cursor: pointer; font-size: 16px; font-weight: bold; box-shadow: 0 5px 20px rgba(46, 213, 115, 0.4);">💾 KAYDET & GÜNCELLE</button>
+                </div>
+                
+                <div id="kayitSonucu" style="margin-top: 20px; text-align: center; padding: 15px; border-radius: 10px; display: none; font-size: 16px; font-weight: bold;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('urunSecim').addEventListener('change', function() {
+    var urunNo = this.value;
+    if(urunNo) {
+        gorselYukle(urunNo);
+        document.getElementById('gorselInputlari').style.display = 'block';
+    } else {
+        document.getElementById('gorselInputlari').style.display = 'none';
+    }
+});
+
+function gorselYukle(urunNo) {
+    // localStorage'dan görselleri yükle
+    var pageId = 'sayfa' + urunNo;
+    for(var i = 1; i <= 15; i++) {
+        var imgId = 'topImg' + i;
+        var saved = localStorage.getItem(pageId + '_' + imgId);
+        if (saved) {
+            // Base64 formatında kaydedilmiş, bunu URL olarak kullan
+            document.getElementById('gorsel' + i).value = saved;
+        } else {
+            document.getElementById('gorsel' + i).value = '';
+        }
+    }
+}
+
+function gorselKaydet() {
+    var urunNo = document.getElementById('urunSecim').value;
+    if(!urunNo) {
+        alert('Lütfen ürün seçiniz');
+        return;
+    }
+    
+    var pageId = 'sayfa' + urunNo;
+    var veriler = {};
+    
+    // Kutucuklardaki görselleri oku ve kaydet
+    for(var i = 1; i <= 15; i++) {
+        var gorselUrl = document.getElementById('gorsel' + i).value;
+        if(gorselUrl) {
+            var imgId = 'topImg' + i;
+            // localStorage'a kaydet (ürün sayfasında kullanılacak)
+            localStorage.setItem(pageId + '_' + imgId, gorselUrl);
+            veriler['gorsel' + i] = gorselUrl;
+        }
+    }
+    
+    // Firebase'e de kaydet (varsa)
+    if (typeof database !== 'undefined' && database) {
+        for(var i = 1; i <= 15; i++) {
+            var gorselUrl = document.getElementById('gorsel' + i).value;
+            if(gorselUrl) {
+                database.ref('urunAyarlari/urun' + urunNo + '/gorseller/topImg' + i).set(gorselUrl);
+            }
+        }
+    }
+    
+    var sonuc = document.getElementById('kayitSonucu');
+    sonuc.style.display = 'block';
+    sonuc.style.background = 'rgba(46, 213, 115, 0.2)';
+    sonuc.style.color = '#2ed573';
+    sonuc.textContent = '✅ Ürün ' + urunNo + ' görselleri kaydedildi! Sayfa otomatik güncellenecek.';
+    
+    setTimeout(function() {
+        sonuc.style.display = 'none';
+    }, 3000);
+}
+</script>
+
+</body>
+</html>
